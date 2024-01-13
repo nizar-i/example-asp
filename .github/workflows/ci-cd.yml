@@ -83,4 +83,4 @@ jobs:
         namespace: default
         name: api
         chart-path: helm-chart/
-        values: tag=${{ steps.img.outputs.TAG }}
+        values: image.tag=${{ steps.img.outputs.TAG }}
