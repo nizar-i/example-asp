@@ -31,6 +31,8 @@ spec:
           env:
             - name: DD_LOGS_INJECTION
               value: {{ .Values.datadog.enabled | quote }}
+            - name: DD_TRACE_STARTUP_LOGS
+              value: {{ .Values.datadog.enabled | quote }}
           ports:
             - name: http
               containerPort: 80
