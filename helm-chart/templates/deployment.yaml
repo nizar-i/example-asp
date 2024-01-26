@@ -2,6 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}
+  labels:
+    tags.datadoghq.com/env: {{ .Values.env }}
+    tags.datadoghq.com/service: {{ .Chart.Name }}
+    tags.datadoghq.com/version: {{ .Values.version }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -11,11 +15,22 @@ spec:
     metadata:
       labels:
         app: {{ .Chart.Name }}
+        tags.datadoghq.com/env: {{ .Values.env }}
+        tags.datadoghq.com/service: {{ .Chart.Name }}
+        tags.datadoghq.com/version: {{ .Values.version }}
+        admission.datadoghq.com/enabled: {{ .Values.datadog.enabled }}
+      annotations:
+      {{ if eq .Values.datadog.language "dotnet" }}
+        admission.datadoghq.com/dotnet-lib.version: v2.46.0
+      {{ end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DD_LOGS_INJECTION
+              value: {{ .Values.datadog.enabled }}
           ports:
             - name: http
               containerPort: 80

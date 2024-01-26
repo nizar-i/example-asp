@@ -1,3 +1,6 @@
+version: "0.1.0"
+env: "dev"
+
 replicaCount: 1
 
 image:
@@ -8,3 +11,7 @@ image:
 service:
   type: NodePort
   port: 80
+
+datadog:
+  enabled: "true"
+  language: dotnet
