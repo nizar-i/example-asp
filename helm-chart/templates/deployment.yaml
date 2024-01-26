@@ -5,7 +5,7 @@ metadata:
   labels:
     tags.datadoghq.com/env: {{ .Values.env }}
     tags.datadoghq.com/service: {{ .Chart.Name }}
-    tags.datadoghq.com/version: {{ .Values.version }}
+    tags.datadoghq.com/version: {{ .Values.version | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -17,8 +17,8 @@ spec:
         app: {{ .Chart.Name }}
         tags.datadoghq.com/env: {{ .Values.env }}
         tags.datadoghq.com/service: {{ .Chart.Name }}
-        tags.datadoghq.com/version: {{ .Values.version }}
-        admission.datadoghq.com/enabled: {{ .Values.datadog.enabled }}
+        tags.datadoghq.com/version: {{ .Values.version | quote }}
+        admission.datadoghq.com/enabled: {{ .Values.datadog.enabled | quote }}
       annotations:
       {{ if eq .Values.datadog.language "dotnet" }}
         admission.datadoghq.com/dotnet-lib.version: v2.46.0
@@ -30,7 +30,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: DD_LOGS_INJECTION
-              value: {{ .Values.datadog.enabled }}
+              value: {{ .Values.datadog.enabled | quote }}
           ports:
             - name: http
               containerPort: 80
